@@ -18,7 +18,7 @@ import           System.FilePath  (isAbsolute, makeRelative, normalise,
                                    takeExtension, takeFileName)
 import           System.IO.Error  (catchIOError)
 import           System.Process   (system)
-
+import           Hakyll.Core.Metadata
 
 --------------------------------------------------------------------------------
 data Configuration = Configuration
@@ -96,6 +96,10 @@ data Configuration = Configuration
     , -- | Override other settings used by the preview server. Default is
       -- 'Static.defaultFileServerSettings'.
       previewSettings      :: FilePath -> Static.StaticSettings
+    , -- | Function to extract metadata from the files
+      --
+      -- By default it returns empty metadata
+      provideMetadata      :: FilePath -> IO Metadata
     }
 
 --------------------------------------------------------------------------------
@@ -119,6 +123,7 @@ defaultConfiguration = Configuration
     , previewHost          = "127.0.0.1"
     , previewPort          = 8000
     , previewSettings      = Static.defaultFileServerSettings
+    , provideMetadata      = const (return mempty)
     }
   where
     ignoreFile' path

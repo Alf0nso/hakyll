@@ -71,8 +71,8 @@ run mode config logger rules = do
     Logger.message logger "Creating store..."
     store <- Store.new (inMemoryCache config) $ storeDirectory config
     Logger.message logger "Creating provider..."
-    (provider, modifiedMeta) <- newProvider store (shouldIgnoreFile config) $
-        providerDirectory config
+    (provider, modifiedMeta) <- newProvider' store (shouldIgnoreFile config)
+        (provideMetadata config) (providerDirectory config)
     Logger.message logger "Running rules..."
     ruleSet  <- runRules rules provider
 
